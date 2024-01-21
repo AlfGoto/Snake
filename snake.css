@@ -1,28 +1,49 @@
-*{
+* {
     box-sizing: border-box;
 }
 
 
-#snakeGRID{
+#snakeGRID {
     height: 60vh;
     width: 60vh;
     background-color: lightblue;
     display: flex;
     flex-wrap: wrap;
-}
-.square{
-    height: 3vh;
-    width: 3vh;
-    border: 1px solid black;
+
+    .square {
+        height: 3vh;
+        width: 3vh;
+        border: 1px solid black;
+    }
+    .tete {
+        background-color: white;
+    }
+    .corp {
+        background-color: white;
+    }
+    .loot {
+        background-color: gold;
+    }
 }
 
-.tete{
-    background-color: white;
-}
-.corp{
-    background-color: white;
-}
+#snakeGODIV {
+    visibility: hidden;
+    position: absolute;
+    top: 15vh;
+    left: 10vh;
+    width: 40vh;
+    height: 30vh;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-.loot{
-    background-color: gold;
+    p{
+        font-size: 3.5vh;
+        margin-top: 0px;
+    }
+    button{
+        font-size: 3.5vh;
+    }
 }

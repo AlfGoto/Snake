@@ -11,16 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var pause = false
 
+    var snakeGODIV = document.getElementById('snakeGODIV')
+    var snakeGOBUTTON = document.getElementById('snakeGOBUTTON')
+    var snakeGOP = document.getElementById('snakeGOP')
 
 
-    for (let i = 0; i < totalNumber; i++) {
-        let square = document.createElement('div')
-        snakeGRID.appendChild(square)
-        square.classList.add('square')
-        square.id = i
+    build()
+    function build() {
+        snakeGRID.innerHTML = ''
+        for (let i = 0; i < totalNumber; i++) {
+            let square = document.createElement('div')
+            snakeGRID.appendChild(square)
+            square.classList.add('square')
+            square.id = i
 
-        if (i == 189) { square.classList.add('tete') }
-        if (i == 399) { spawnLOOT() }
+            if (i == 189) { square.classList.add('tete') }
+            if (i == 399) { spawnLOOT() }
+        }
     }
 
     setInterval(() => {
@@ -43,17 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function changeTete(arg) {
         if (pause) { return }
         if (arg > 399 || arg < 0) {
-            console.log('game over')
+            gameOver()
             return
         }
         if (direction == 'est' && arg % 20 == 19) {
-            console.log('game over')
+            gameOver()
             return
         }
         if (direction == 'ouest' && arg % 20 == 0) {
-            console.log('game over')
+            gameOver()
             return
         }
+
+        if(document.getElementById(arg).classList.contains('corp')){gameOver(); return}
+
 
 
         document.getElementsByClassName('tete')[0].classList.add('corp')
@@ -61,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementsByClassName('tete')[0].classList.remove('tete')
         document.getElementById(arg).classList.add('tete')
-
+        
         let corpARR = document.getElementsByClassName('corp')
         for (let i = 0; i < corpARR.length; i++) {
             corpARR[i].classList.forEach(element => {
@@ -117,4 +127,25 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(rand).classList.add('loot')
         lootID = rand
     }
+
+    function gameOver() {
+        snakeGOP.innerHTML = 'Game Over ! (' + (corpNB - 1) + ' points)'
+        snakeGODIV.style.visibility = 'visible'
+        console.log('game over')
+        pause = true
+    }
+
+    snakeGOBUTTON.addEventListener('click', () => {
+        snakeGODIV.style.visibility = 'hidden'
+
+        direction = 'sud'
+        gameSpeed = 500
+        ratioSpeedUpgrade = 0.50
+        corpNB = 1
+        lootID = 0
+
+        pause = false
+
+        build()
+    })
 })
