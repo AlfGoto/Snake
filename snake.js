@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var direction = 'sud'
     var gameSpeed = 500
+    var corpNB = 0
+    var lootID = 0
 
 
 
@@ -49,9 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('game over')
             return
         }
-        console.log(arg)
         document.getElementsByClassName('tete')[0].classList.remove('tete')
         document.getElementById(arg).classList.add('tete')
+
+        if(lootID == arg){
+            document.getElementById(lootID).classList.remove('loot')
+            spawnLOOT()
+            console.log('LOOT')
+        }
     }
 
 
@@ -61,4 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key == 'q') { direction = 'est' }
         if (e.key == 'd') { direction = 'ouest' }
     })
+
+
+    spawnLOOT()
+    function spawnLOOT() {
+        var rand = Math.floor(Math.random() * ((totalNumber - 1) - 0 + 1) + 0)
+
+        if (document.getElementById(rand).classList.contains('tete') || document.getElementById(rand).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand + 1).classList.contains('tete') || document.getElementById(rand + 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand - 1).classList.contains('tete') || document.getElementById(rand - 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand + 20).classList.contains('tete') || document.getElementById(rand + 20).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand - 20).classList.contains('tete') || document.getElementById(rand - 20).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand - 20 - 1).classList.contains('tete') || document.getElementById(rand - 20 - 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand - 20 + 1).classList.contains('tete') || document.getElementById(rand - 20 + 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand + 20 - 1).classList.contains('tete') || document.getElementById(rand + 20 - 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (document.getElementById(rand + 20 + 1).classList.contains('tete') || document.getElementById(rand + 20 + 1).classList.contains('corp')) { spawnLOOT(); return }
+
+        document.getElementById(rand).classList.add('loot')
+        lootID = rand
+    }
 })
