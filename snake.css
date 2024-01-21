@@ -1,0 +1,24 @@
+*{
+    box-sizing: border-box;
+}
+
+
+#snakeGRID{
+    height: 60vh;
+    width: 60vh;
+    background-color: lightblue;
+    display: flex;
+    flex-wrap: wrap;
+}
+.square{
+    height: 3vh;
+    width: 3vh;
+    border: 1px solid black;
+}
+
+.tete{
+    background-color: white;
+}
+.corp{
+    background-color: white;
+}
