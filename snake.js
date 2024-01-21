@@ -5,8 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var direction = 'sud'
     var gameSpeed = 500
-    var corpNB = 0
+    var ratioSpeedUpgrade = 0.50
+    var corpNB = 1
     var lootID = 0
+
+    var pause = false
 
 
 
@@ -16,9 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
         square.classList.add('square')
         square.id = i
 
-        if (i == 189) {
-            square.classList.add('tete')
-        }
+        if (i == 189) { square.classList.add('tete') }
+        if (i == 399) { spawnLOOT() }
     }
 
     setInterval(() => {
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, gameSpeed)
 
     function changeTete(arg) {
+        if (pause) { return }
         if (arg > 399 || arg < 0) {
             console.log('game over')
             return
@@ -51,38 +54,65 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('game over')
             return
         }
+
+
+        document.getElementsByClassName('tete')[0].classList.add('corp')
+        document.getElementsByClassName('tete')[0].classList.add(corpNB)
+
         document.getElementsByClassName('tete')[0].classList.remove('tete')
         document.getElementById(arg).classList.add('tete')
 
-        if(lootID == arg){
+        let corpARR = document.getElementsByClassName('corp')
+        for (let i = 0; i < corpARR.length; i++) {
+            corpARR[i].classList.forEach(element => {
+                if (element != 'square' && element != 'corp' && element != 0) {
+                    corpARR[i].classList.add(element - 1)
+                    corpARR[i].classList.remove(element)
+                }
+            });
+        }
+
+        if (lootID == arg) {
             document.getElementById(lootID).classList.remove('loot')
             spawnLOOT()
-            console.log('LOOT')
+            gameSpeed = gameSpeed * ratioSpeedUpgrade
+            corpNB++
         }
     }
 
+    //pour fixer un bug relou
+    setInterval(() => {
+        let arr = document.getElementsByClassName('corp')
+        for (let index = 0; index < arr.length; index++) {
+            if (arr[index].classList.contains('0')) {
+                arr[index].classList = 'square'
+            }
+        }
+    }, 10)
 
-    window.addEventListener('keypress', (e) => {
+
+    document.addEventListener('keypress', (e) => {
         if (e.key == 'z') { direction = 'nord' }
         if (e.key == 's') { direction = 'sud' }
         if (e.key == 'q') { direction = 'est' }
         if (e.key == 'd') { direction = 'ouest' }
     })
+    window.onkeydown = (e) => { if (e.key == 'Escape') { pause = !pause } }
 
 
-    spawnLOOT()
+
     function spawnLOOT() {
         var rand = Math.floor(Math.random() * ((totalNumber - 1) - 0 + 1) + 0)
 
         if (document.getElementById(rand).classList.contains('tete') || document.getElementById(rand).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand + 1).classList.contains('tete') || document.getElementById(rand + 1).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand - 1).classList.contains('tete') || document.getElementById(rand - 1).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand + 20).classList.contains('tete') || document.getElementById(rand + 20).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand - 20).classList.contains('tete') || document.getElementById(rand - 20).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand - 20 - 1).classList.contains('tete') || document.getElementById(rand - 20 - 1).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand - 20 + 1).classList.contains('tete') || document.getElementById(rand - 20 + 1).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand + 20 - 1).classList.contains('tete') || document.getElementById(rand + 20 - 1).classList.contains('corp')) { spawnLOOT(); return }
-        if (document.getElementById(rand + 20 + 1).classList.contains('tete') || document.getElementById(rand + 20 + 1).classList.contains('corp')) { spawnLOOT(); return }
+        if (rand < 399) { if (document.getElementById(rand + 1).classList.contains('tete') || document.getElementById(rand + 1).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand > 0) { if (document.getElementById(rand - 1).classList.contains('tete') || document.getElementById(rand - 1).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand < 379) { if (document.getElementById(rand + 20).classList.contains('tete') || document.getElementById(rand + 20).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand > 20) { if (document.getElementById(rand - 20).classList.contains('tete') || document.getElementById(rand - 20).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand > 21) { if (document.getElementById(rand - 20 - 1).classList.contains('tete') || document.getElementById(rand - 20 - 1).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand > 19) { if (document.getElementById(rand - 20 + 1).classList.contains('tete') || document.getElementById(rand - 20 + 1).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand < 380) { if (document.getElementById(rand + 20 - 1).classList.contains('tete') || document.getElementById(rand + 20 - 1).classList.contains('corp')) { spawnLOOT(); return } }
+        if (rand < 378) { if (document.getElementById(rand + 20 + 1).classList.contains('tete') || document.getElementById(rand + 20 + 1).classList.contains('corp')) { spawnLOOT(); return } }
 
         document.getElementById(rand).classList.add('loot')
         lootID = rand
