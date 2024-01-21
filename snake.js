@@ -30,22 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    setInterval(() => {
-        switch (direction) {
-            case 'nord':
-                changeTete(Number(document.getElementsByClassName('tete')[0].id) - 20)
-                break;
-            case 'sud':
-                changeTete(Number(document.getElementsByClassName('tete')[0].id) + 20)
-                break;
-            case 'est':
-                changeTete(Number(document.getElementsByClassName('tete')[0].id) - 1)
-                break;
-            case 'ouest':
-                changeTete(Number(document.getElementsByClassName('tete')[0].id) + 1)
-                break;
-        }
-    }, gameSpeed)
+    secondes()
+    function secondes(){
+        setTimeout(()=>{
+            switch (direction) {
+                case 'nord':
+                    changeTete(Number(document.getElementsByClassName('tete')[0].id) - 20)
+                    break;
+                case 'sud':
+                    changeTete(Number(document.getElementsByClassName('tete')[0].id) + 20)
+                    break;
+                case 'est':
+                    changeTete(Number(document.getElementsByClassName('tete')[0].id) - 1)
+                    break;
+                case 'ouest':
+                    changeTete(Number(document.getElementsByClassName('tete')[0].id) + 1)
+                    break;
+            }
+
+            secondes()
+        }, gameSpeed)
+    }
 
     function changeTete(arg) {
         if (pause) { return }
